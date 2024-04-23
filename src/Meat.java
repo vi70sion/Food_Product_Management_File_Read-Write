@@ -14,4 +14,7 @@ public class Meat extends Product{
     public String printProductInfo(){
         return super.printProductInfo() + ", rūšis: " + typeOfMeat;
     }
+    @Override
+    public String printProductInfoLine(){ return super.printProductInfoLine() + "," + typeOfMeat; }
+
 }

@@ -24,5 +24,8 @@ public class Product {
     public String printProductInfo(){
         return "ID: " + code + ", pavadinimas: " + name +  ", price: " + price + ", galiojimo data: " + expiryDate;
     }
+    public String printProductInfoLine(){
+        return code + "," + name +  "," + price + "," + expiryDate;
+    }
 
 }

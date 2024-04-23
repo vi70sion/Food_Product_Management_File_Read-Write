@@ -13,4 +13,6 @@ public class Fruit extends Product {
     public String printProductInfo(){
         return super.printProductInfo() + ", ekologiškas: " + ecoFriendly;
     }
+    @Override
+    public String printProductInfoLine(){ return super.printProductInfoLine() + "," + ecoFriendly; }
 }

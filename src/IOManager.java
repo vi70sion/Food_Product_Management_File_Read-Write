@@ -1,8 +1,8 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.List;
+
+import static java.lang.Boolean.parseBoolean;
 
 public class IOManager implements CSVImportExport{
     @Override
@@ -12,17 +12,18 @@ public class IOManager implements CSVImportExport{
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
+            boolean booleanValue = false;
             while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
                 String[] lineValues = line.split(",");
                 try {
-                    boolean booleanValue = Boolean.parseBoolean(lineValues[4]); //if true - fruit
+                    booleanValue = parseBool(lineValues[4]); //if no error - fruit, else - meat
                     list.add(new Fruit(Integer.parseInt(lineValues[0]),
                                        lineValues[1],
                                        Double.parseDouble(lineValues[2]),
                                        LocalDate.parse(lineValues[3]),
-                                       Boolean.parseBoolean(lineValues[4])));
-                } catch (NumberFormatException e) {
+                                       parseBoolean(lineValues[4])));
+                } catch (IllegalArgumentException  e) {
                     list.add(new Meat(Integer.parseInt(lineValues[0]),
                                        lineValues[1],
                                        Double.parseDouble(lineValues[2]),
@@ -37,8 +38,19 @@ public class IOManager implements CSVImportExport{
     }
 
     @Override
-    public void exportToCSV(List<Product> products, String path) {
-
+    public void exportToCSV(String filePath, List<Product> list) {
+        try {
+            FileWriter fileWriter = new FileWriter(filePath, false);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            for(Product item : list){
+                bufferedWriter.write(item.printProductInfoLine()); //csv format
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            System.err.println("Nepavyko įrašyti failo: " + e.getMessage());
+        }
     }
 
     @Override
@@ -56,4 +68,13 @@ public class IOManager implements CSVImportExport{
 
     }
 
+    public static boolean parseBool(String value) {
+        if (value.equalsIgnoreCase("true")) {
+            return true;
+        } else if (value.equalsIgnoreCase("false")) {
+            return false;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 }

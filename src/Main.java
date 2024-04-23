@@ -31,6 +31,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         String filePath = "C:\\JavaTest\\foods.csv";
+        String filePathWrite = "C:\\JavaTest\\foodslist.csv";
         IOManager manager = new IOManager();
         List<Product> productList = new ArrayList<>();
 
@@ -42,17 +43,16 @@ public class Main {
             switch (choice){
                 case "1":
                     manager.importFromCSV(filePath, productList);
-                    for(Product item : productList) item.printProductInfo();
+                    for(Product item : productList) System.out.println(item.printProductInfo()); //console
                     break;
                 case "2":
-
+                    manager.exportToCSV(filePathWrite, productList);
                     break;
                 case "3":
 
                     break;
                 case "0":
                     break;
-
             }
         } while(!choice.equals("0"));
 
