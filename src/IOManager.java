@@ -1,6 +1,7 @@
 import java.io.*;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -71,13 +72,33 @@ public class IOManager implements CSVImportExport{
     }
 
     @Override
-    public void removeProductFromCSV(Product product) {
-
+    public void removeProductFromCSV(String filePath, Product product) {
+        List<Product> productList = new ArrayList<Product>();
+        IOManager manager = new IOManager();
+        manager.importFromCSV(filePath, productList);
+        for(Product item : productList){
+            if(product.compareProducts(product, item)){
+                System.out.println("Radau!");
+                productList.remove(item);
+                break;
+            }
+        }
+        manager.exportToCSV(filePath, productList);
     }
 
     @Override
-    public void removeProductFromCSV(int code) {
-
+    public void removeProductFromCSV(String filePath, int code) {
+        List<Product> productList = new ArrayList<Product>();
+        IOManager manager = new IOManager();
+        manager.importFromCSV(filePath, productList);
+        for(Product item : productList){
+            if(item.getCode() == code){
+                System.out.println("Radau!");
+                productList.remove(item);
+                break;
+            }
+        }
+        manager.exportToCSV(filePath, productList);
     }
 
     public Product describeProduct() {

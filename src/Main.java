@@ -37,10 +37,11 @@ public class Main {
         String choice = "";
         do{
             System.out.println("(1)- importuoti prekes iš failo, (2)- eksportuoti prekes į failą, (3)- pridėti prekę į failą,");
-            System.out.println("(4)- pašalinti prekę iš failo, (5)- pašalinti prekę iš failo pagal ID, (0)- pabaiga");
+            System.out.println("(4)- pašalinti prekę iš failo, (5)- pašalinti prekę iš failo pagal ID, (6)- dėti prekes į krepšelį, (0)- pabaiga");
             choice = scanner.nextLine();
             switch (choice){
                 case "1":
+                    productList.clear();
                     manager.importFromCSV(filePath, productList);
                     for(Product item : productList) System.out.println(item.printProductInfo()); //console
                     break;
@@ -55,20 +56,45 @@ public class Main {
                     manager.importFromCSV(filePathWrite, productList);
                     for(Product item : productList) System.out.println(item.printProductInfo()); //console
                     System.out.println("Įveskite norimą pašalinti produktą viena eilute:");
-
                     Product product = manager.describeProduct();
-                    //productList.sort((Comparator<? super Product>) product);
-                    for(Product item : productList){
-                        if(product.equals(item)){
-                            System.out.println("RADAU!");
+                    manager.removeProductFromCSV(filePathWrite, product);
+                    break;
+                case "5":
+                    productList.clear();
+                    manager.importFromCSV(filePathWrite, productList);
+                    for(Product item : productList) System.out.println(item.printProductInfo()); //console
+                    System.out.println("Įveskite norimo pašalinti produkto kodą:");
+                    int code = Integer.parseInt(scanner.nextLine());
+                    manager.removeProductFromCSV(filePathWrite, code);
+                case "6":
+                    productList.clear();
+                    List<Product> shoppingCart = new ArrayList<>();
+                    manager.importFromCSV(filePathWrite, productList);
+                    for(Product item : productList) System.out.println(item.printProductInfo()); //console
+                    String input;
+                    do{
+                        System.out.println("Pridėkite prekę į krepšelį, įveskite (kodas) arba (0- pabaiga): ");
+                        input = scanner.nextLine();
+                        switch (input){
+                            case "0":
+                                break;
+                            default:
+                                for(Product item : productList){
+                                    if(item.getCode() == Integer.parseInt(input)){
+                                        System.out.println("Radau!");
+                                        shoppingCart.add(item);
+                                        break;
+                                    }
+                                }
+                                break;
                         }
-
+                    } while (!input.equals("0"));
+                    double shoppingCartTotal = 0;
+                    for(Product item : shoppingCart){
+                        item.printProductInfoLine();
+                        shoppingCartTotal += item.getPrice();
                     }
-
-                    //productList.remove(manager.describeProduct());
-                    System.out.println();
-                    manager.exportToCSV(filePathWrite, productList);
-                    System.out.println();
+                    System.out.println("Krepšelio suma: " + shoppingCartTotal);
                     break;
                 case "0":
                     break;
