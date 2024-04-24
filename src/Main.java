@@ -1,9 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,7 +32,7 @@ public class Main {
         String filePath = "C:\\JavaTest\\foods.csv";
         String filePathWrite = "C:\\JavaTest\\foodslist.csv";
         IOManager manager = new IOManager();
-        List<Product> productList = new ArrayList<>();
+        List<Product> productList = new ArrayList<Product>();
 
         String choice = "";
         do{
@@ -49,15 +48,33 @@ public class Main {
                     manager.exportToCSV(filePathWrite, productList);
                     break;
                 case "3":
+                    manager.addProductToCSV(filePathWrite, manager.describeProduct());
+                    break;
+                case "4":
+                    productList.clear();
+                    manager.importFromCSV(filePathWrite, productList);
+                    for(Product item : productList) System.out.println(item.printProductInfo()); //console
+                    System.out.println("Įveskite norimą pašalinti produktą viena eilute:");
 
+                    Product product = manager.describeProduct();
+                    //productList.sort((Comparator<? super Product>) product);
+                    for(Product item : productList){
+                        if(product.equals(item)){
+                            System.out.println("RADAU!");
+                        }
+
+                    }
+
+                    //productList.remove(manager.describeProduct());
+                    System.out.println();
+                    manager.exportToCSV(filePathWrite, productList);
+                    System.out.println();
                     break;
                 case "0":
                     break;
             }
         } while(!choice.equals("0"));
 
-
-
-
     }
+
 }
